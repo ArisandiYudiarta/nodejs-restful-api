@@ -4,7 +4,7 @@ import { authMiddleware } from "../middleware/auth-middleware.js";
 
 const userRouter = new express.Router();
 userRouter.use(authMiddleware);
-userRouter.post("/api/users/get", userController.get);
+userRouter.get("/api/users/current", userController.get);
 // TODO: implement and test the untested response below if the user reqeust other than POST method for above endpoint
 // userRouter.all("/api/users", (req, res, next) => {
 //     // Custom response for unsupported methods

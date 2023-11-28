@@ -56,3 +56,28 @@ describe("POST /api/users/login", function () {
         expect(result.body.data.token).not.toBe("test");
     });
 });
+
+describe("GET /api/users/current", function () {
+    beforeEach(async () => {
+        await createTestUser();
+    });
+
+    afterEach(async () => {
+        await removeTestUser();
+    });
+
+    it("should can get current user", async () => {
+        const result = await supertest(web).get("/api/users/current").set("Authorization", "test");
+
+        expect(result.status).toBe(200);
+        expect(result.body.data.username).toBe("test");
+        expect(result.body.data.name).toBe("test");
+    });
+
+    it("should reject if the token is invalid", async () => {
+        const result = await supertest(web).get("/api/users/current").set("Authorization", "tokensalah");
+
+        expect(result.status).toBe(401);
+        expect(result.body.errors).toBeDefined();
+    });
+});
