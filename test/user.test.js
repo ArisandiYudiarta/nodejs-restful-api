@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { web } from "../src/application/web.js";
 // import { prismaClient } from "../src/application/database.js";
-import { removeTestUser, createTestUser } from "./test-util.js";
+import { removeTestUser, createTestUser, getTestUser } from "./test-util.js";
 import { logger } from "../src/application/logging.js";
 
 //unit test register
@@ -79,5 +79,31 @@ describe("GET /api/users/current", function () {
 
         expect(result.status).toBe(401);
         expect(result.body.errors).toBeDefined();
+    });
+});
+
+describe("DELETE /api/users/logout", function () {
+    beforeEach(async () => {
+        await createTestUser();
+    });
+
+    afterEach(async () => {
+        await removeTestUser();
+    });
+
+    it("should can logout", async () => {
+        const result = await supertest(web).delete("/api/users/logout").set("Authorization", "test");
+
+        expect(result.status).toBe(200);
+        expect(result.body.data).toBe("OK");
+
+        const user = await getTestUser();
+        expect(user.token).toBeNull();
+    });
+
+    it("should reject logout if token is invalid", async () => {
+        const result = await supertest(web).delete("/api/users/logout").set("Authorization", "tokeninvalid");
+
+        expect(result.status).toBe(401);
     });
 });

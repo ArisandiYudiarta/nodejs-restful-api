@@ -10,5 +10,6 @@ userRouter.get("/api/users/current", userController.get);
 //     // Custom response for unsupported methods
 //     res.status(405).json({ error: "Method Not Allowed", allowedMethods: ["POST"] });
 //   });
+userRouter.delete("/api/users/logout", userController.logout);
 
 export { userRouter };
