@@ -4,6 +4,7 @@
     "description": "belajar nodejs resful api",
     "main": "app.js",
     "scripts": {
+        "start": "node ./src/main.js",
         "test": "jest -i"
     },
     "jest": {
