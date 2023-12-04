@@ -4,7 +4,9 @@ const register = async (req, res, next) => {
     try {
         const result = await userService.register(req.body);
         res.status(200).json({
-            data: result,
+            error: "false",
+            message: "User Created",
+            // data: result,
         });
     } catch (e) {
         next(e);
@@ -15,7 +17,9 @@ const login = async (req, res, next) => {
     try {
         const result = await userService.login(req.body);
         res.status(200).json({
-            data: result,
+            error: "false",
+            message: "User Created",
+            loginResult: result,
         });
     } catch (e) {
         next(e);
@@ -24,9 +28,10 @@ const login = async (req, res, next) => {
 
 const get = async (req, res, next) => {
     try {
-        const username = req.user.username;
-        const result = await userService.get(username);
+        const email = req.user.email;
+        const result = await userService.get(email);
         res.status(200).json({
+            error: "false",
             data: result,
         });
     } catch (e) {
@@ -36,9 +41,10 @@ const get = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
     try {
-        await userService.logout(req.user.username);
+        await userService.logout(req.user.email);
         res.status(200).json({
-            data: "OK",
+            error: "false",
+            message: "Berhasil Logout!",
         });
     } catch (e) {
         next(e);

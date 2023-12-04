@@ -11,10 +11,19 @@ datasource db {
 }
 
 model User {
-  username String @id @db.VarChar(100)
+  email String @id @db.VarChar(100)
   password String @db.VarChar(100)
   name String @db.VarChar(100)
   token String? @db.VarChar(100)
 
   @@map("users")
+}
+
+model Article{
+  article_id String @id @db.VarChar(100)
+  name String @db.VarChar(100)
+  photo_url String @db.VarChar(300)
+  description String @db.VarChar(300)
+
+  @@map("articles")
 }
