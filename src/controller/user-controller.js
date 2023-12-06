@@ -18,7 +18,7 @@ const login = async (req, res, next) => {
         const result = await userService.login(req.body);
         res.status(200).json({
             error: "false",
-            message: "User Created",
+            message: "Login Successfully",
             loginResult: result,
         });
     } catch (e) {
@@ -29,9 +29,11 @@ const login = async (req, res, next) => {
 const get = async (req, res, next) => {
     try {
         const email = req.user.email;
+        console.log(email);
         const result = await userService.get(email);
         res.status(200).json({
             error: "false",
+            message: "Data Retrieved",
             data: result,
         });
     } catch (e) {

@@ -19,11 +19,13 @@ model User {
   @@map("users")
 }
 
-model Article{
-  article_id String @id @db.VarChar(100)
-  name String @db.VarChar(100)
-  photo_url String @db.VarChar(300)
-  description String @db.VarChar(300)
+model Article {
+  article_id Int @id @default(autoincrement())
+  title String @db.VarChar(100)
+  tag String @db.VarChar(50)
+  content String? @db.VarChar(300)
+  author_name String? @db.VarChar(100)
+  photo_url String? @db.VarChar(300)
 
   @@map("articles")
 }
