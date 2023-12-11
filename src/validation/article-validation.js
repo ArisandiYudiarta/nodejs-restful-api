@@ -1,5 +1,6 @@
 import Joi from "joi";
 
-const getArticleValidation = Joi.string().max(50).required();
+const getArticleValidation = Joi.number().required();
+const getAllArticlesValidation = Joi.any();
 
-export { getArticleValidation };
+export { getArticleValidation, getAllArticlesValidation };

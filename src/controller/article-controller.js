@@ -1,10 +1,22 @@
 import articleService from "../service/article-service.js";
 
-const getArticle = async (req, res, next) => {
+const get = async (req, res, next) => {
     try {
-        const articleTag = req.body.tag;
-        console.log(articleTag);
-        const result = await articleService.getArticle(articleTag);
+        const articleId = req.params.id;
+        // console.log(articleId);
+        const result = await articleService.getArticle(articleId);
+        res.status(200).json({
+            error: "false",
+            message: result,
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
+const getAll = async (req, res, next) => {
+    try {
+        const result = await articleService.getAllArticles();
         res.status(200).json({
             error: "false",
             message: result,
@@ -15,5 +27,6 @@ const getArticle = async (req, res, next) => {
 };
 
 export default {
-    getArticle,
+    get,
+    getAll,
 };

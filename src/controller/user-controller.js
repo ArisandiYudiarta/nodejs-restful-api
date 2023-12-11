@@ -29,7 +29,7 @@ const login = async (req, res, next) => {
 const get = async (req, res, next) => {
     try {
         const email = req.user.email;
-        console.log(email);
+        // console.log(email);
         const result = await userService.get(email);
         res.status(200).json({
             error: "false",
