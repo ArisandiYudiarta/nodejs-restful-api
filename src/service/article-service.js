@@ -1,6 +1,6 @@
 import { prismaClient } from "../application/database.js";
 import { ResponseError } from "../error/response-error.js";
-import { getArticleValidation, getAllArticlesValidation } from "../validation/article-validation.js";
+import { getArticleValidation, inputArticleValidation } from "../validation/article-validation.js";
 import { validate } from "../validation/validation.js";
 
 const getArticle = async (id) => {
@@ -46,7 +46,33 @@ const getAllArticles = async () => {
     return articles;
 };
 
+const inputArticle = async (input) => {
+    const article = validate(inputArticleValidation, input);
+    console.log(article);
+    const checkTitle = await prismaClient.article.count({
+        where: {
+            title: article.title,
+        },
+    });
+
+    if (checkTitle === 1) {
+        throw new ResponseError(400, "The title you inserted has already been taken");
+    }
+
+    return prismaClient.article.create({
+        data: article,
+        select: {
+            title: true,
+            tag: true,
+            content: true,
+            author_name: true,
+            photo_url: true,
+        },
+    });
+};
+
 export default {
     getArticle,
     getAllArticles,
+    inputArticle,
 };

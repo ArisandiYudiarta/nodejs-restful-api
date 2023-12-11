@@ -13,5 +13,6 @@ userRouter.delete("/users/logout", userController.logout);
 // Article Route
 userRouter.get("/article/get/:id", articleController.get);
 userRouter.get("/article/getall", articleController.getAll);
+userRouter.post("/article/input", articleController.input);
 
 export { userRouter };

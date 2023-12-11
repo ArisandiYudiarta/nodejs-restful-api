@@ -7,7 +7,7 @@ import { v4 as uuid } from "uuid";
 
 const register = async (request) => {
     const user = validate(registerUserValidation, request);
-
+    console.log(user);
     const countUser = await prismaClient.user.count({
         where: {
             email: user.email,
