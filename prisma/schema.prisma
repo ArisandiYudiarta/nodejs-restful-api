@@ -37,6 +37,8 @@ model Feeder {
   email String @db.VarChar(100)
   user User @relation(fields: [email], references: [email])
   schedule Schedule[]
+  history History[]
+  temperature Temperature[]
 
   @@map("feeders")
 }
@@ -49,6 +51,25 @@ model Schedule {
   is_active Boolean 
   feeder_id String @db.VarChar(100)
   feeder Feeder @relation(fields: [feeder_id], references: [id])
-  
+
   @@map("schedules")
+}
+
+model History {
+  id Int @id @default(autoincrement())
+  date_time String @db.VarChar(100)
+  portion Int @db.Int()
+  feeder_id String
+  feeder Feeder @relation(fields: [feeder_id], references: [id])
+
+  @@map("history")
+}
+
+model Temperature {
+  id Int @id @default(autoincrement())
+  temperature Int @db.Int()
+  feeder_id String
+  feeder Feeder @relation(fields: [feeder_id], references: [id])
+
+  @@map("temperatures")
 }
