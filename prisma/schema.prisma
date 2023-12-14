@@ -15,6 +15,7 @@ model User {
   password String @db.VarChar(100)
   name String @db.VarChar(100)
   token String? @db.VarChar(100)
+  feeders Feeder[]
 
   @@map("users")
 }
@@ -28,4 +29,26 @@ model Article {
   photo_url String? @db.VarChar(300)
 
   @@map("articles")
+}
+
+model Feeder {
+  id String @id @db.VarChar(100)
+  name String @db.VarChar(100)
+  email String @db.VarChar(100)
+  user User @relation(fields: [email], references: [email])
+  schedule Schedule[]
+
+  @@map("feeders")
+}
+
+model Schedule {
+  id Int @id @default(autoincrement())
+  hour Int @db.Int()
+  minute Int @db.Int()
+  portion Int @db.Int()
+  is_active Boolean 
+  feeder_id String @db.VarChar(100)
+  feeder Feeder @relation(fields: [feeder_id], references: [id])
+  
+  @@map("schedules")
 }
