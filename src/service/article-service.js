@@ -48,7 +48,6 @@ const getAllArticles = async () => {
 
 const inputArticle = async (input) => {
     const article = validate(inputArticleValidation, input);
-    console.log(article);
     const checkTitle = await prismaClient.article.count({
         where: {
             title: article.title,
@@ -71,8 +70,28 @@ const inputArticle = async (input) => {
     });
 };
 
+const deleteArticle = async (id) => {
+    const idArticle = validate(getArticleValidation, id);
+    const cekArticle = await prismaClient.article.findFirst({
+        where: {
+            article_id: idArticle,
+        },
+    });
+
+    if (!cekArticle) {
+        throw new ResponseError(404, "Article Tidak Ditemukan");
+    }
+
+    return prismaClient.article.delete({
+        where: {
+            article_id: idArticle,
+        },
+    });
+};
+
 export default {
     getArticle,
     getAllArticles,
     inputArticle,
+    deleteArticle,
 };

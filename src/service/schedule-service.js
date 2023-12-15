@@ -1,6 +1,6 @@
 import { prismaClient } from "../application/database.js";
 import { ResponseError } from "../error/response-error.js";
-import { getScheduleValidation, inputScheduleValidation, updateScheduleValidation } from "../validation/schedule-validation.js";
+import { idScheduleValidation, getScheduleValidation, inputScheduleValidation, updateScheduleValidation } from "../validation/schedule-validation.js";
 import { validate } from "../validation/validation.js";
 
 const create = async (request) => {
@@ -92,8 +92,31 @@ const update = async (request) => {
     });
 };
 
+const remove = async (schedule_id, feeder_id) => {
+    const idSchedule = validate(idScheduleValidation, schedule_id);
+    const idFeeder = validate(getScheduleValidation, feeder_id);
+
+    const checkSchedule = await prismaClient.schedule.count({
+        where: {
+            id: idSchedule,
+            feeder_id: idFeeder,
+        },
+    });
+
+    if (checkSchedule !== 1) {
+        throw new ResponseError(404, "Schedule tidak ditemukan");
+    }
+
+    return prismaClient.schedule.delete({
+        where: {
+            id: idSchedule,
+        },
+    });
+};
+
 export default {
     create,
     get,
     update,
+    remove,
 };

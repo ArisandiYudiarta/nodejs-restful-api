@@ -19,4 +19,6 @@ const updateScheduleValidation = Joi.object({
     feeder_id: Joi.string().max(100).required(),
 });
 
-export { inputScheduleValidation, getScheduleValidation, updateScheduleValidation };
+const idScheduleValidation = Joi.number().positive().required();
+
+export { inputScheduleValidation, getScheduleValidation, updateScheduleValidation, idScheduleValidation };

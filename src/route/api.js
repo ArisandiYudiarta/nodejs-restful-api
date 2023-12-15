@@ -16,6 +16,7 @@ userRouter.delete("/users/logout", userController.logout);
 userRouter.get("/article/get/:id", articleController.get);
 userRouter.get("/article/getall", articleController.getAll);
 userRouter.post("/article/input", articleController.input);
+userRouter.delete("/article/delete/:id_article", articleController.remove);
 
 //Feeder Route
 userRouter.post("/feeder/input", feederController.createFeeder);
@@ -24,5 +25,6 @@ userRouter.get("/feeder/get/", feederController.getFeeder);
 //Schedule Route
 userRouter.post("/schedule/input", scheduleController.createSchedule);
 userRouter.put("/schedule/edit/:schedule_id/:feeder_id", scheduleController.updateSchedule);
+userRouter.delete("/schedule/delete/:schedule_id/:feeder_id", scheduleController.deleteSchedule);
 
 export { userRouter };

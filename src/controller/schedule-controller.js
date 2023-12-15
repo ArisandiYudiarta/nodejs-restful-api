@@ -44,8 +44,22 @@ const updateSchedule = async (req, res, next) => {
     }
 };
 
+const deleteSchedule = async (req, res, next) => {
+    try {
+        const scheduleId = req.params.schedule_id;
+        const feederId = req.params.feeder_id;
+        await scheduleService.remove(scheduleId, feederId);
+        res.status(200).json({
+            message: "Schedule successfully deleted",
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
 export default {
     createSchedule,
     getSchedules,
     updateSchedule,
+    deleteSchedule,
 };

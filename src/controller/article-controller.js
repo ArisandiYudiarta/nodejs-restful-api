@@ -38,8 +38,22 @@ const input = async (req, res, next) => {
     }
 };
 
+const remove = async (req, res, next) => {
+    try {
+        const idArticle = req.params.id_article;
+        console.log(idArticle);
+        await articleService.deleteArticle(idArticle);
+        res.status(200).json({
+            message: "Article successfuly deleted!",
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
 export default {
     get,
     getAll,
     input,
+    remove,
 };
