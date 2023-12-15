@@ -49,6 +49,7 @@ const get = async (id) => {
             id: true,
             hour: true,
             minute: true,
+            portion: true,
             is_active: true,
         },
     });

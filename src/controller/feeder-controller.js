@@ -18,7 +18,7 @@ const createFeeder = async (req, res, next) => {
 
 const getFeeder = async (req, res, next) => {
     try {
-        const userEmail = req.params.email;
+        const userEmail = req.user.email;
 
         const result = await feederService.get(userEmail);
         res.status(200).json({

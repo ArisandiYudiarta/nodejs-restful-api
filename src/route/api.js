@@ -19,7 +19,7 @@ userRouter.post("/article/input", articleController.input);
 
 //Feeder Route
 userRouter.post("/feeder/input", feederController.createFeeder);
-userRouter.get("/feeder/get/:email", feederController.getFeeder);
+userRouter.get("/feeder/get/", feederController.getFeeder);
 
 //Schedule Route
 userRouter.post("/schedule/input", scheduleController.createSchedule);
