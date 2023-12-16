@@ -10,6 +10,8 @@ const create = async (request) => {
         data: history,
         select: {
             date_time: true,
+            hour: true,
+            minute: true,
             portion: true,
             feeder_id: true,
         },
@@ -35,6 +37,8 @@ const get = async (id) => {
         },
         select: {
             date_time: true,
+            hour: true,
+            minute: true,
             portion: true,
         },
     });

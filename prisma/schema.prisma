@@ -58,6 +58,8 @@ model Schedule {
 model History {
   id Int @id @default(autoincrement())
   date_time String @db.VarChar(100)
+  hour Int @db.Int() @default(10)
+  minute Int @db.Int() @default(23)
   portion Int @db.Int()
   feeder_id String
   feeder Feeder @relation(fields: [feeder_id], references: [id])
