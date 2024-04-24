@@ -1,7 +1,7 @@
-import { prismaClient } from "../application/database.js";
-import { ResponseError } from "../error/response-error.js";
-import { getFeederValidation, inputFeederValidation } from "../validation/feeder-validation.js";
-import { validate } from "../validation/validation.js";
+import { prismaClient } from '../application/database.js';
+import { ResponseError } from '../error/response-error.js';
+import { getFeederValidation, inputFeederValidation } from '../validation/feeder-validation.js';
+import { validate } from '../validation/validation.js';
 
 const create = async (user, request) => {
     const feeder = validate(inputFeederValidation, request);
@@ -14,7 +14,7 @@ const create = async (user, request) => {
     });
 
     if (checkIdFeeder === 1) {
-        throw new ResponseError(400, "ID Feeder Sudah Terpakai");
+        throw new ResponseError(400, 'ID Feeder Sudah Terpakai');
     }
 
     return prismaClient.feeder.create({
@@ -29,7 +29,7 @@ const create = async (user, request) => {
 const get = async (email) => {
     const userEmail = validate(getFeederValidation, email);
 
-    const feeder = await prismaClient.feeder.findFirst({
+    const feeder = await prismaClient.feeder.findMany({
         where: {
             email: userEmail,
         },
@@ -40,7 +40,7 @@ const get = async (email) => {
     });
 
     if (!feeder) {
-        throw new ResponseError(404, "Tidak ada feeder yang ditemukan");
+        throw new ResponseError(404, 'Tidak ada feeder yang ditemukan');
     }
 
     return feeder;
