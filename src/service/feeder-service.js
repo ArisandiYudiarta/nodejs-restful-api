@@ -46,4 +46,24 @@ const get = async (email) => {
     return feeder;
 };
 
-export default { create, get };
+const getFirst = async (email) => {
+    const userEmail = validate(getFeederValidation, email);
+
+    const feeder = await prismaClient.feeder.findFirst({
+        where: {
+            email: userEmail,
+        },
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+
+    if (!feeder) {
+        throw new ResponseError(404, 'Tidak ada feeder yang ditemukan');
+    }
+
+    return feeder;
+};
+
+export default { create, get, getFirst };

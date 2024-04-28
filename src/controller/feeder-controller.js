@@ -1,4 +1,4 @@
-import feederService from "../service/feeder-service.js";
+import feederService from '../service/feeder-service.js';
 
 const createFeeder = async (req, res, next) => {
     try {
@@ -8,7 +8,7 @@ const createFeeder = async (req, res, next) => {
         const result = await feederService.create(user, request);
 
         res.status(200).json({
-            message: "Feeder berhasil ditambahkan!",
+            message: 'Feeder berhasil ditambahkan!',
             data: result.name,
         });
     } catch (e) {
@@ -29,7 +29,21 @@ const getFeeder = async (req, res, next) => {
     }
 };
 
+const getFirstFeeder = async (req, res, next) => {
+    try {
+        const userEmail = req.user.email;
+
+        const result = await feederService.getFirst(userEmail);
+        res.status(200).json({
+            data: result,
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
 export default {
     createFeeder,
     getFeeder,
+    getFirstFeeder,
 };

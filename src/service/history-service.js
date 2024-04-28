@@ -1,7 +1,7 @@
-import { prismaClient } from "../application/database.js";
-import { ResponseError } from "../error/response-error.js";
-import { createHistoryValidation, getHistoryValidation } from "../validation/history-validation.js";
-import { validate } from "../validation/validation.js";
+import { prismaClient } from '../application/database.js';
+import { ResponseError } from '../error/response-error.js';
+import { createHistoryValidation, getHistoryValidation } from '../validation/history-validation.js';
+import { validate } from '../validation/validation.js';
 
 const create = async (request) => {
     const history = validate(createHistoryValidation, request);
@@ -28,10 +28,13 @@ const get = async (id) => {
     });
 
     if (!checkHistory) {
-        throw new ResponseError(404, "Tidak ada history yang ditemukan");
+        throw new ResponseError(404, 'Tidak ada history yang ditemukan');
     }
 
     const history = await prismaClient.history.findMany({
+        orderBy: {
+            id: 'desc',
+        },
         where: {
             feeder_id: feederId,
         },
