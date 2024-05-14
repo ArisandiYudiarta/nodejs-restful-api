@@ -10,8 +10,6 @@ try {
     console.error('crypto support is disabled!');
 }
 
-console.log(process.env.SECRET_KEY);
-
 web.listen(port, () => {
     logger.info(`App starting on port ${port}`);
 });

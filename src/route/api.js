@@ -7,8 +7,10 @@ import scheduleController from '../controller/schedule-controller.js';
 
 const userRouter = new express.Router();
 
-// User Route
+//telling this router to use the auth middleware (confirming the token);
 userRouter.use(authMiddleware);
+
+// User Route
 userRouter.get('/users/current', userController.get);
 userRouter.delete('/users/logout', userController.logout);
 

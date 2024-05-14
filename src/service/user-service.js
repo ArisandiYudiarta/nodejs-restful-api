@@ -1,9 +1,11 @@
-import { validate } from "../validation/validation.js";
-import { getUserValidation, loginUserValidation, registerUserValidation } from "../validation/user-validation.js";
-import { prismaClient } from "../application/database.js";
-import { ResponseError } from "../error/response-error.js";
-import bcrypt from "bcrypt";
-import { v4 as uuid } from "uuid";
+import { validate } from '../validation/validation.js';
+import { getUserValidation, loginUserValidation, registerUserValidation } from '../validation/user-validation.js';
+import { prismaClient } from '../application/database.js';
+import { ResponseError } from '../error/response-error.js';
+import bcrypt from 'bcrypt';
+import { v4 as uuid } from 'uuid';
+import jwt from 'jsonwebtoken';
+import { SECRET_KEY } from '../application/web.js';
 
 const register = async (request) => {
     const user = validate(registerUserValidation, request);
@@ -15,7 +17,7 @@ const register = async (request) => {
     });
 
     if (countUser === 1) {
-        throw new ResponseError(400, "Email Address already exist");
+        throw new ResponseError(400, 'Email Address already exist');
     }
 
     user.password = await bcrypt.hash(user.password, 10);
@@ -32,6 +34,7 @@ const register = async (request) => {
 const login = async (request) => {
     //proses validation
     const loginRequest = validate(loginUserValidation, request);
+    let token;
 
     //pengecekan data user
     const user = await prismaClient.user.findUnique({
@@ -40,13 +43,14 @@ const login = async (request) => {
         },
         select: {
             email: true,
+            name: true,
             password: true,
         },
     });
 
     //kondisi jika tidak ada
     if (!user) {
-        throw new ResponseError(401, "Email or password is incorrect");
+        throw new ResponseError(401, 'Email or password is incorrect');
     }
 
     //jika ketemu maka akan di cek passnya
@@ -54,25 +58,46 @@ const login = async (request) => {
 
     //jika pass tidak sama/valid
     if (!isPasswordValid) {
-        throw new ResponseError(401, "Email or password is incorrect");
+        throw new ResponseError(401, 'Email or password is incorrect');
     }
 
-    //jika password sesuai maka generate token agar user bisa login
-    const token = uuid().toString();
-    //simpan token ke database
-    return prismaClient.user.update({
-        data: {
-            token: token,
-        },
-        where: {
-            email: user.email,
-        },
-        select: {
-            name: true,
-            email: true,
-            token: true,
-        },
-    });
+    // Sign and Generate JWT
+    try {
+        token = jwt.sign(
+            {
+                userName: user.name,
+                email: user.email,
+            },
+            SECRET_KEY,
+            {
+                expiresIn: '1h',
+            }
+        );
+    } catch (e) {
+        console.log(e);
+        throw new ResponseError(500, 'Faulty at signing Token');
+    }
+
+    return token;
+
+    // OLD TOKEN SYSTEM BELOW ============================================
+
+    // //jika password sesuai maka generate token agar user bisa login
+    // const token = uuid().toString();
+    // //simpan token ke database
+    // return prismaClient.user.update({
+    //     data: {
+    //         token: token,
+    //     },
+    //     where: {
+    //         email: user.email,
+    //     },
+    //     select: {
+    //         name: true,
+    //         email: true,
+    //         token: true,
+    //     },
+    // });
 };
 
 const get = async (email) => {
@@ -89,7 +114,7 @@ const get = async (email) => {
     });
 
     if (!user) {
-        throw new ResponseError(404, "User is not found!");
+        throw new ResponseError(404, 'User is not found!');
     }
 
     return user;
@@ -105,7 +130,7 @@ const logout = async (email) => {
     });
 
     if (!user) {
-        throw new ResponseError(404, "User is not found");
+        throw new ResponseError(404, 'User is not found');
     }
 
     return prismaClient.user.update({
