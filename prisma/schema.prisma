@@ -45,8 +45,8 @@ model Feeder {
 
 model Schedule {
   id Int @id @default(autoincrement())
-  day String @db.VarChar(100) @default("everyday")
-  timezone String @db.VarChar(10) @default("WITA")
+  day Int @db.Int @default(8)
+  timezone Int @db.Int @default(3)
   hour Int @db.Int()
   minute Int @db.Int()
   portion Int @db.Int()
@@ -60,7 +60,7 @@ model Schedule {
 model History {
   id Int @id @default(autoincrement())
   date_time String @db.VarChar(100)
-  timezone String @db.VarChar(10) @default("WITA")
+  timezone Int @db.Int @default(3)
   hour Int @db.Int() @default(10)
   minute Int @db.Int() @default(23)
   portion Int @db.Int()

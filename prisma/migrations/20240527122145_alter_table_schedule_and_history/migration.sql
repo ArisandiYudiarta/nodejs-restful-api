@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE `history` ADD COLUMN `timezone` INTEGER NOT NULL DEFAULT 3;
+
+-- AlterTable
+ALTER TABLE `schedules` ADD COLUMN `day` INTEGER NOT NULL DEFAULT 8,
+    ADD COLUMN `timezone` INTEGER NOT NULL DEFAULT 3;

@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `history` ADD COLUMN `timezone` VARCHAR(10) NOT NULL DEFAULT 'WITA';
