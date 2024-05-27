@@ -32,13 +32,6 @@ export const authMiddleware = async (req, res, next) => {
                 req.user = user;
                 next();
             }
-            // res.status(200).json({
-            //     errors: 'false',
-            //     data: {
-            //         name: decodedToken.userName,
-            //         email: decodedToken.email,
-            //     },
-            // });
         } catch (e) {
             res.status(400)
                 .json({
@@ -48,30 +41,3 @@ export const authMiddleware = async (req, res, next) => {
         }
     }
 };
-
-// export const authMiddleware = async (req, res, next) => {
-//     const token = req.get('Authorization');
-//     if (!token) {
-//         res.status(401)
-//             .json({
-//                 errors: 'Unauthorized',
-//             })
-//             .end();
-//     } else {
-//         const user = await prismaClient.user.findFirst({
-//             where: {
-//                 token: token,
-//             },
-//         });
-//         if (!user) {
-//             res.status(401)
-//                 .json({
-//                     errors: 'Unauthorized',
-//                 })
-//                 .end();
-//         } else {
-//             req.user = user;
-//             next();
-//         }
-//     }
-// };

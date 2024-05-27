@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `schedules` ADD COLUMN `day` VARCHAR(100) NOT NULL DEFAULT 'everyday',
+    ADD COLUMN `timezone` VARCHAR(10) NOT NULL DEFAULT 'WITA';
