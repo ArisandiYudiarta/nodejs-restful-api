@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { SECRET_KEY } from '../application/web.js';
+import { SENDGRID_API_KEY } from '../application/web.js';
 
 const register = async (request) => {
     const user = validate(registerUserValidation, request);
@@ -19,6 +20,30 @@ const register = async (request) => {
     if (countUser === 1) {
         throw new ResponseError(400, 'Email Address already exist');
     }
+
+    //SENDING OTP KEY TO THE EMAIL===================================================================================
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(SENDGRID_API_KEY);
+    const msg = {
+        to: user.email,
+        from: 'cs@rekanikan.com',
+        subject: 'Test Email sending with sendgrid',
+        text: 'and easy to do anywhere, even with Node.js',
+        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    };
+
+    try {
+        sgMail
+            .send(msg)
+            .then(() => {
+                console.log('Email sent');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    } catch (e) {}
+
+    //end code for otp email
 
     user.password = await bcrypt.hash(user.password, 10);
 
@@ -79,25 +104,6 @@ const login = async (request) => {
     }
 
     return token;
-
-    // OLD TOKEN SYSTEM BELOW ============================================
-
-    // //jika password sesuai maka generate token agar user bisa login
-    // const token = uuid().toString();
-    // //simpan token ke database
-    // return prismaClient.user.update({
-    //     data: {
-    //         token: token,
-    //     },
-    //     where: {
-    //         email: user.email,
-    //     },
-    //     select: {
-    //         name: true,
-    //         email: true,
-    //         token: true,
-    //     },
-    // });
 };
 
 const get = async (email) => {
