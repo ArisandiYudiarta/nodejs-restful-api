@@ -101,7 +101,6 @@ const sendEmailOtp = async (email) => {
     //end code for otp email
 };
 
-//TODO: verify email otp (this part need some work, figure out how to catch all the error so that your app dont break)
 const verifyOtp = async (request) => {
     const user = validate(otpValidation, request);
 
@@ -112,7 +111,6 @@ const verifyOtp = async (request) => {
     try {
         const client = twilio(accountSid, authToken);
 
-        //TODO: return this after making sure that the status changes on the database
         const verificationCheck = await client.verify.v2.services(serviceSid).verificationChecks.create({ to: user.email, code: user.code });
 
         console.log(verificationCheck);
@@ -196,6 +194,24 @@ const login = async (request) => {
             password: true,
         },
     });
+
+    const checkUnverifiedUser = await prismaClient.user.findUnique({
+        where: {
+            email: loginRequest.email,
+            status: 'unverified',
+        },
+        select: {
+            email: true,
+            name: true,
+            password: true,
+        },
+    });
+
+    console.log(checkUnverifiedUser);
+
+    if (checkUnverifiedUser) {
+        throw new ResponseError(401, 'Your account is not verified, please proceed to the verification page.');
+    }
 
     if (!user) {
         throw new ResponseError(401, 'Email or password is incorrect');
