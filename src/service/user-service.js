@@ -158,6 +158,8 @@ const verifyOtp = async (request) => {
                 console.error('Error updating user:', e);
                 throw new ResponseError(500, 'Failed to update user status.');
             }
+        } else {
+            throw new ResponseError(401, 'incorrect verification code, verification status: ', verificationCheck.status);
         }
     } catch (e) {
         if (e.status === 429 && e.code === 60202) {
