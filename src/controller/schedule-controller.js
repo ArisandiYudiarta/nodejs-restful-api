@@ -1,10 +1,10 @@
-import scheduleService from "../service/schedule-service.js";
+import scheduleService from '../service/schedule-service.js';
 
 const createSchedule = async (req, res, next) => {
     try {
         const result = await scheduleService.create(req.body);
         res.status(200).json({
-            message: "Schedule successfully created!",
+            message: 'Schedule successfully created!',
             data: result,
         });
     } catch (e) {
@@ -18,6 +18,7 @@ const getSchedules = async (req, res, next) => {
 
         const result = await scheduleService.get(feederId);
         res.status(200).json({
+            error: false,
             data: result,
         });
     } catch (e) {
@@ -50,7 +51,7 @@ const deleteSchedule = async (req, res, next) => {
         const feederId = req.params.feeder_id;
         await scheduleService.remove(scheduleId, feederId);
         res.status(200).json({
-            message: "Schedule successfully deleted",
+            message: 'Schedule successfully deleted',
         });
     } catch (e) {
         next(e);
