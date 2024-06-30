@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 const createHistoryValidation = Joi.object({
     date_time: Joi.string().max(100).required(),
@@ -6,6 +6,7 @@ const createHistoryValidation = Joi.object({
     hour: Joi.number().required(),
     minute: Joi.number().required(),
     feeder_id: Joi.string().required(),
+    timezone: Joi.number(),
 });
 
 const getHistoryValidation = Joi.string().required();

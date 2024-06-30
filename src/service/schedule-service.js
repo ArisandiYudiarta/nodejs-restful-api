@@ -1,7 +1,7 @@
-import { prismaClient } from "../application/database.js";
-import { ResponseError } from "../error/response-error.js";
-import { idScheduleValidation, getScheduleValidation, inputScheduleValidation, updateScheduleValidation } from "../validation/schedule-validation.js";
-import { validate } from "../validation/validation.js";
+import { prismaClient } from '../application/database.js';
+import { ResponseError } from '../error/response-error.js';
+import { idScheduleValidation, getScheduleValidation, inputScheduleValidation, updateScheduleValidation } from '../validation/schedule-validation.js';
+import { validate } from '../validation/validation.js';
 
 const create = async (request) => {
     const schedule = validate(inputScheduleValidation, request);
@@ -13,7 +13,7 @@ const create = async (request) => {
     });
 
     if (checkIdFeeder != 1) {
-        throw new ResponseError(400, "ID feeder tidak valid!");
+        throw new ResponseError(400, 'ID feeder tidak valid!');
     }
 
     return prismaClient.schedule.create({
@@ -24,6 +24,8 @@ const create = async (request) => {
             portion: true,
             is_active: true,
             feeder_id: true,
+            day: true,
+            timezone: true,
         },
     });
 };
@@ -38,7 +40,7 @@ const get = async (id) => {
     });
 
     if (!checkSchedule) {
-        throw new ResponseError(404, "Tidak ada schedule yang ditemukan");
+        throw new ResponseError(404, 'Tidak ada schedule yang ditemukan');
     }
 
     const schedules = await prismaClient.schedule.findMany({
@@ -51,6 +53,8 @@ const get = async (id) => {
             minute: true,
             portion: true,
             is_active: true,
+            day: true,
+            timezone: true,
         },
     });
 
@@ -68,7 +72,7 @@ const update = async (request) => {
     });
 
     if (totalScheduleInDatabase !== 1) {
-        throw new ResponseError(404, "Schedule tidak ditemukan");
+        throw new ResponseError(404, 'Schedule tidak ditemukan');
     }
 
     return prismaClient.schedule.update({
@@ -80,6 +84,8 @@ const update = async (request) => {
             minute: schedule.minute,
             portion: schedule.portion,
             is_active: schedule.is_active,
+            day: schedule.day,
+            timezone: schedule.timezone,
         },
         select: {
             id: true,
@@ -88,6 +94,8 @@ const update = async (request) => {
             portion: true,
             is_active: true,
             feeder_id: true,
+            day: true,
+            timezone: true,
         },
     });
 };
@@ -104,7 +112,7 @@ const remove = async (schedule_id, feeder_id) => {
     });
 
     if (checkSchedule !== 1) {
-        throw new ResponseError(404, "Schedule tidak ditemukan");
+        throw new ResponseError(404, 'Schedule tidak ditemukan');
     }
 
     return prismaClient.schedule.delete({

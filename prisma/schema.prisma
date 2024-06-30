@@ -15,6 +15,7 @@ model User {
   password String @db.VarChar(100)
   name String @db.VarChar(100)
   token String? @db.VarChar(100)
+  status String @db.VarChar(100) @default("unverified")
   feeders Feeder[]
 
   @@map("users")
@@ -45,6 +46,8 @@ model Feeder {
 
 model Schedule {
   id Int @id @default(autoincrement())
+  day Int @db.Int @default(8)
+  timezone Int @db.Int @default(3)
   hour Int @db.Int()
   minute Int @db.Int()
   portion Int @db.Int()
@@ -58,6 +61,7 @@ model Schedule {
 model History {
   id Int @id @default(autoincrement())
   date_time String @db.VarChar(100)
+  timezone Int @db.Int @default(3)
   hour Int @db.Int() @default(10)
   minute Int @db.Int() @default(23)
   portion Int @db.Int()

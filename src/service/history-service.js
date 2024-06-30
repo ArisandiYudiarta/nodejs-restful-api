@@ -6,6 +6,20 @@ import { validate } from '../validation/validation.js';
 const create = async (request) => {
     const history = validate(createHistoryValidation, request);
 
+    const feederId = request.feeder_id;
+
+    console.log(feederId);
+
+    const checkIdFeeder = await prismaClient.feeder.findFirst({
+        where: {
+            id: feederId,
+        },
+    });
+
+    if (!checkIdFeeder) {
+        throw new ResponseError(404, 'Feeder ID tidak ditemukan');
+    }
+
     return prismaClient.history.create({
         data: history,
         select: {
@@ -14,6 +28,7 @@ const create = async (request) => {
             minute: true,
             portion: true,
             feeder_id: true,
+            timezone: true,
         },
     });
 };
@@ -43,6 +58,7 @@ const get = async (id) => {
             hour: true,
             minute: true,
             portion: true,
+            timezone: true,
         },
     });
 
